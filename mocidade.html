@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Feliz Aniversário! 🎉</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Fundo atualizado inspirado na paleta da CCB */
+      background: linear-gradient(135deg, #1F1F1F, #000000, #FFFFFF);
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-top: 15px;
+    }
+
+    p {
+      font-size: 16px;
+      max-width: 400px;
+      margin: 10px auto;
+      line-height: 1.5;
+    }
+
+    .container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .carousel {
+      position: relative;
+      width: 280px;
+      height: 350px;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+      margin-bottom: 15px;
+      background: rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: none;
+      margin: auto;
+    }
+
+    .carousel img.active {
+      display: block;
+      animation: fade 1s ease-in-out;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .controls {
+      margin-bottom: 15px;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px 12px;
+      margin: 0 5px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .btn {
+      padding: 25px 40px;
+      background: #FFD700;
+      color: #1F1F1F;
+      font-size: 24px;
+      font-weight: bold;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0px 0px 25px rgba(255, 215, 0, 0.7);
+      transition: 0.3s;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .btn:hover {
+      background: #FFC300;
+      transform: scale(1.05);
+    }
+
+    audio {
+      display: none;
+    }
+
+    /* Animação de queda */
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      .btn {
+        font-size: 20px;
+        padding: 18px 30px;
+      }
+
+      .carousel {
+        width: 220px;
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Tela inicial -->
+  <div id="start">
+    <button class="btn" onclick="startGift()">
+      🎉 Abrir Surpresa! 🎉
+    </button>
+  </div>
+
+  <!-- Conteúdo do presente -->
+  <div class="container" id="gift">
+    <div class="carousel" id="carousel">
+      <img src="foto1.jpg" alt="Foto 1" class="active">
+      <img src="foto2.jpg" alt="Foto 2">
+      <img src="foto3.jpg" alt="Foto 3">
+    </div>
+
+    <div class="controls">
+      <button class="nav-btn" onclick="prevImage()">◀️</button>
+      <button class="nav-btn" onclick="nextImage()">▶️</button>
+    </div>
+
+    <h1>Deus abençoe pela presença!</h1>
+    <p>Isaías 41:10: "Não temas, porque eu sou contigo; não te assombres, porque eu sou teu Deus; eu te fortaleço, e te ajudo, e te sustento com a destra da minha justiça."</p>
+
+    <audio id="music" autoplay loop>
+      <source src="musica.mp3" type="audio/mp3">
+      Seu navegador não suporta áudio.
+    </audio>
+  </div>
+
+  <script>
+    let index = 0;
+    let autoSlide;
+    const images = document.querySelectorAll("#carousel img");
+
+    function showImage(i) {
+      images.forEach(img => img.classList.remove("active"));
+      images[i].classList.add("active");
+    }
+
+    function nextImage() {
+      index = (index + 1) % images.length;
+      showImage(index);
+      resetAutoSlide();
+    }
+
+    function prevImage() {
+      index = (index - 1 + images.length) % images.length;
+      showImage(index);
+      resetAutoSlide();
+    }
+
+    function startAutoSlide() {
+      autoSlide = setInterval(() => {
+        index = (index + 1) % images.length;
+        showImage(index);
+      }, 3000);
+    }
+
+    function resetAutoSlide() {
+      clearInterval(autoSlide);
+      startAutoSlide();
+    }
+
+    function startGift() {
+      document.getElementById("start").style.display = "none";
+      document.getElementById("gift").style.display = "flex";
+
+      const music = document.getElementById("music");
+      music.play().catch(()=>{});
+
+      // notas musicais caindo 🎶
+      const notes = ["♪", "♫", "♬", "♩", "♭", "♯"];
+      setInterval(() => {
+        const note = document.createElement("span");
+        note.textContent = notes[Math.floor(Math.random() * notes.length)];
+        note.style.position = "absolute";
+        note.style.left = Math.random() * 100 + "vw";
+        note.style.fontSize = 20 + Math.random() * 30 + "px";
+        note.style.top = "-50px";
+        note.style.color = `hsl(${Math.random()*360}, 80%, 60%)`;
+        note.style.animation = "fall 3s linear forwards";
+        document.body.appendChild(note);
+        setTimeout(() => note.remove(), 3000);
+      }, 300);
+
+      startAutoSlide();
+    }
+  </script>
+</body>
+</html>
